@@ -8,47 +8,48 @@ var connection = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 connection.connect();
+
 function signUp(req, res, next) {
-  const query = connection.query(`SELECT * from users WHERE email= ?`, [email]);
-  query.on("result", (row, index) => {
-    if (row) {
-      res.json({
-        status: "error",
-        message: "Email Already exists",
-        data: req.body,
-      });
-      res.end();
-    } else {
-      addUsersToDatabase();
+  const salt = bcrypt.genSaltSync(10);
+  const hashPassword = bcrypt.hashSync(req.body.password, salt);
+  const query = connection.query(
+    `SELECT * from users WHERE email= ?`,
+    [req.body.email],
+    (err, results) => {
+      if (err) {
+        res.json({
+          status: "error",
+          message: "Internal Server Error",
+          data: req.body,
+        });
+        res.end();
+      }
+      if (!!results.length) {
+        res.json({
+          status: "error",
+          message: "Email Already exists",
+          data: req.body,
+        });
+        res.end();
+      } else {
+        const query2 = connection.query(
+          `INSERT INTO users (name, email, password) VALUES (?,?,?)`,
+          [req.body.name, req.body.email, hashPassword]
+        );
+        query2.on("end", () => {
+          next();
+        });
+        query2.on("error", () => {
+          res.json({
+            status: "error",
+            message: "Internal Server Error",
+            data: req.body,
+          });
+          res.end();
+        });
+      }
     }
-  });
-  query.on("error", () => {
-    res.json({
-      status: "error",
-      message: "Internal Server Error",
-      data: req.body,
-    });
-    res.end();
-  });
-  const addUsersToDatabase = () => {
-    let user;
-    const query = connection.query(
-      `INSERT INTO users (name, email, password) VALUES (? , ? , ?)`,
-      [res.body.name, req.body.email, req.body.password]
-    );
-    query.on("result", (row, index) => {
-      next();
-      return;
-    });
-    query.on("error", () => {
-      res.json({
-        status: "error",
-        message: "Internal Server Error",
-        data: req.body,
-      });
-      res.end();
-    });
-  };
+  );
 }
 function signIn(req, res, next) {
   let token;
@@ -65,7 +66,7 @@ function signIn(req, res, next) {
           { expiresIn: "2h" }
         );
         req.header.token = token;
-        req.header.token_created_on = new Date.now();
+        req.header.token_created_on = new Date();
         req.header.token_validity = "2h";
         next();
         return;

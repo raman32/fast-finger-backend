@@ -1,12 +1,12 @@
 const router = require('express').Router();
 
-router.get('/highScore', (req, res) => {
-  res.send(req.params.bookId)
-})
+//Import middlewares
+const {jwtValidation} = require('../middlewares/userValidation')
 
-router.post('/addScore', function (req, res) {
-  res.send('POST request to the homepage')
-})
+//Import models
+const {getHighScores, addScore} =  require('../models/Game');
+router.get('/highScore',getHighScores)
+router.post('/addScore',jwtValidation,addScore)
 
 
 module.exports = router;

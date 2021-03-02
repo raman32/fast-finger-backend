@@ -19,4 +19,4 @@ app.use("/word",wordRouter)
 app.use("/game",gameRouter)
 
 app.get('/', (req, res) => res.send('Hello World!'))
-app.listen(port, () => console.log(`Example app listening on ${port} port!`))
+app.listen(port, () => console.log(`fastfingers backend listening on ${port} port!`))

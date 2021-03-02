@@ -1,17 +1,29 @@
 const router = require('express').Router();
 
 // Import MiddleWares
+const {loginValidation, registerValidation, jwtValidation} = require('../middlewares/userValidation');
 
-router.post('/register', function (req, res) {
-  res.send('POST request to the homepage')
+// Import Models
+const {signUp, signIn } = require('../models/User');
+
+router.post('/register',registerValidation,signUp,signIn,function (req, res) {
+  res.json({
+    "auth-token": req.header.token,
+    "created-on": req.header.token_created_on,
+    "token-expiry": req.header.token_validity,
+  })
 })
 
-router.post('/login', function (req, res) {
-  res.send('POST request to the homepage')
+router.post('/login',loginValidation,signIn, function (req, res) {
+  res.json({
+    "auth-token": req.header.token,
+    "created-on": req.header.token_created_on,
+    "token-expiry": req.header.token_validity,
+  })
 })
 
-router.post('/edit', function (req, res) {
-  res.send('POST request to the homepage')
+router.post('/edit',jwtValidation, function (req, res) {
+  res.send("Hi!"+req.user._name);
 })
 
 
