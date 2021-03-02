@@ -1,0 +1,91 @@
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+var mysql = require("mysql");
+var connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+connection.connect();
+function signUp(req, res, next) {
+  const query = connection.query(`SELECT * from users WHERE email= ?`, [email]);
+  query.on("result", (row, index) => {
+    if (row) {
+      res.json({
+        status: "error",
+        message: "Email Already exists",
+        data: req.body,
+      });
+      res.end();
+    } else {
+      addUsersToDatabase();
+    }
+  });
+  query.on("error", () => {
+    res.json({
+      status: "error",
+      message: "Internal Server Error",
+      data: req.body,
+    });
+    res.end();
+  });
+  const addUsersToDatabase = () => {
+    let user;
+    const query = connection.query(
+      `INSERT INTO users (name, email, password) VALUES (? , ? , ?)`,
+      [res.body.name, req.body.email, req.body.password]
+    );
+    query.on("result", (row, index) => {
+      next();
+      return;
+    });
+    query.on("error", () => {
+      res.json({
+        status: "error",
+        message: "Internal Server Error",
+        data: req.body,
+      });
+      res.end();
+    });
+  };
+}
+function signIn(req, res, next) {
+  let token;
+  const query = connection.query(`SELECT * from users WHERE email= ?`, [
+    req.body.email,
+  ]);
+  query.on("result", (row, index) => {
+    if (row) {
+      const validPass = bcrypt.compareSync(req.body.password, row.password);
+      if (validPass) {
+        token = jwt.sign(
+          { _id: row.id, _name: row.name },
+          process.env.TOKEN_SECRET,
+          { expiresIn: "2h" }
+        );
+        req.header.token = token;
+        req.header.token_created_on = new Date.now();
+        req.header.token_validity = "2h";
+        next();
+        return;
+      }
+    }
+    res.json({
+      status: "error",
+      message: "Invalid Email and Password Combinations",
+      data: req.body,
+    });
+    res.end();
+  });
+  query.on("error", () => {
+    res.json({
+      status: "error",
+      message: "Internal Server Error",
+      data: req.body,
+    });
+    res.end();
+  });
+}
+
+module.exports = { signUp, signIn };
