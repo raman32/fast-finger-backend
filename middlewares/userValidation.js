@@ -1,11 +1,11 @@
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 function loginValidation(req, res, next) {
   const loginSchema = Joi.object({
     email: Joi.string().max(255).required().email(),
     password: Joi.string().min(6).required(),
   });
-  const error = Joi.validate(req.body, loginSchema).error;
+  const error = loginSchema.validate(req.body).error;
   if (error) {
     res.status(422).json({
       status: "error",
@@ -22,7 +22,7 @@ function registerValidation(req, res, next) {
     email: Joi.string().max(255).required().email(),
     password: Joi.string().min(6).required(),
   });
-  const error = Joi.validate(req.body, registerSchema).error;
+  const error = registerSchema.validate(req.body).error;
   if (error) {
     res.status(422).json({
       status: "error",
