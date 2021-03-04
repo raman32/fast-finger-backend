@@ -1,11 +1,12 @@
-const express = require('express')
+const express = require('express');
+var cors = require('cors')
 const app = express();
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
   }
 const port = process.env.PORT
 
-
+app.use(cors());
 // Import Routers
 const userRouter = require('./routes/user');
 const gameRouter = require('./routes/game');
