@@ -7,6 +7,21 @@ var connection = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 connection.connect();
+
+const getHighScoreAsync = () => new Promise((resolve, reject) => {
+  const query = connection.query(
+    "SELECT * FROM game ORDER BY score ASC LIMIT 20",
+    (err, results) => {
+      if (err)
+        reject({
+          status: "error",
+          message: "internal error",
+        });
+      resolve(results);
+    }
+  );
+});
+
 function getHighScores(req, res) {
   const query = connection.query(
     "SELECT * FROM game ORDER BY score ASC LIMIT 20",
@@ -39,4 +54,4 @@ function addScore(req, res) {
     });
   });
 }
-module.exports = { getHighScores, addScore };
+module.exports = { getHighScores, addScore, getHighScoreAsync };

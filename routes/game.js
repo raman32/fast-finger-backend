@@ -4,8 +4,12 @@ const router = require('express').Router();
 const {jwtValidation} = require('../middlewares/userValidation')
 
 //Import models
-const {getHighScores, addScore} =  require('../models/Game');
-router.get('/highScore',getHighScores)
+const {getHighScores, addScore, getHighScoreAsync} =  require('../models/Game');
+
+router.get('/highScore',async (req, res)=>{
+    const highScore  = await getHighScoreAsync();
+    res.json(highScore);
+})
 router.post('/addScore',jwtValidation,addScore)
 
 
