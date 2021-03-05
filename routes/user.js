@@ -8,17 +8,21 @@ const {signUp, signIn } = require('../models/User');
 
 router.post('/register',registerValidation,signUp,signIn,function (req, res) {
   res.json({
+    "status": "success",
     "auth-token": req.header.token,
     "created-on": req.header.token_created_on,
     "token-expiry": req.header.token_validity,
+    "name":req.user,
   })
 })
 
 router.post('/login',loginValidation,signIn, function (req, res) {
   res.json({
+    "status": "success",
     "auth-token": req.header.token,
     "created-on": req.header.token_created_on,
     "token-expiry": req.header.token_validity,
+    "name":req.header.userName
   })
 })
 

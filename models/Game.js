@@ -43,7 +43,7 @@ function addScore(req, res) {
   );
   query.on("end", () => {
     res.status(200).json({
-      status: "succes",
+      status: "success",
     });
   });
   query.on("error", () => {

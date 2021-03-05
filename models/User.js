@@ -69,6 +69,7 @@ function signIn(req, res, next) {
         req.header.token = token;
         req.header.token_created_on = new Date();
         req.header.token_validity = "2h";
+        req.header.userName = row.name;
         next();
         return;
       }
