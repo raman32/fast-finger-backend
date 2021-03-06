@@ -10,7 +10,7 @@ connection.connect();
 
 const getHighScoreAsync = () => new Promise((resolve, reject) => {
   const query = connection.query(
-    "SELECT * FROM game ORDER BY score ASC LIMIT 20",
+    "SELECT name, score FROM game LEFT JOIN users ON users.id = game.user_id ORDER BY score ASC LIMIT 20;",
     (err, results) => {
       if (err)
         reject({
