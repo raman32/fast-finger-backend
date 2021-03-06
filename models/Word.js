@@ -17,7 +17,7 @@ function getRandomWords(difficulty,callback) {
           message: "internal error",
           data: req.body,
         });
-        callback(results);
+        callback(results.map((ele)=>ele.word));
     }
   );
 }
