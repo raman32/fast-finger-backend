@@ -6,7 +6,7 @@
   Create a .env file on the root directory for developement purpose and add the following **env** variable
   ENV_NAME | VALUE
   ------------ | -------------
-  PORT | 3000
+  PORT | express server port
   DB_HOST | dabase host server
   DB_PORT | database port 
   DB_NAME | database name
