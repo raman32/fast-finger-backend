@@ -14,7 +14,7 @@
   DB_PASSWORD | databse user password
   TOKEN_SECRET | jwt token secret
   BCRYPT_SALT | bcypt salt
-  Set these varaibles accordingly on your server for hosting
+    Set these varaibles accordingly on your server for hosting
 ## Database
   Databse consists of three tables **users**, **words**, **game**
   ###  **users**
