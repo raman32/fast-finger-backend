@@ -16,7 +16,7 @@
   BCRYPT_SALT | bcypt salt
     Set these varaibles accordingly on your server for hosting
 ## Database
-  Databse consists of three tables **users**, **words**, **game**
+  Set up a MySQL Databse consisting of three tables: **users**, **words**, **game**
   ###  **users**
     +----------+--------------+------+-----+---------+----------------+
     | Field    | Type         | Null | Key | Default | Extra          |
