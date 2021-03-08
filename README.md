@@ -8,7 +8,7 @@
   ------------ | -------------
   PORT | 3000
   DB_HOST | dabase host server
-  DB_PORT | database port generally 3306
+  DB_PORT | database port 
   DB_NAME | database name
   DB_USER | database user
   DB_PASSWORD | databse user password
