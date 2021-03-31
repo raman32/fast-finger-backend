@@ -24,7 +24,7 @@
     | name     | varchar(255) | YES  |     | NULL    |                |
     | email    | varchar(255) | NO   |     | NULL    |                |
     | password | varchar(255) | NO   |     | NULL    |                |
-    | id       | int          | NO   | PRI | NULL    | auto_increment |
+    | id       | int unsigned | NO   | PRI | NULL    | auto_increment |
     +----------+--------------+------+-----+---------+----------------+
 ### **game**
     +---------+--------------+------+-----+---------+----------------+
@@ -38,7 +38,7 @@
     +------------+------------------------------+------+-----+---------+----------------+
     | Field      | Type                         | Null | Key | Default | Extra          |
     +------------+------------------------------+------+-----+---------+----------------+
-    | id         | int                          | NO   | PRI | NULL    | auto_increment |
+    | id         | int unsigned                 | NO   | PRI | NULL    | auto_increment |
     | word       | varchar(50)                  | NO   |     | NULL    |                |
     | difficulty | enum('easy','medium','hard') | NO   |     | NULL    |                |
     +------------+------------------------------+------+-----+---------+----------------+
